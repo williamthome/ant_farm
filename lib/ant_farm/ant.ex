@@ -5,22 +5,22 @@ defmodule AntFarm.Ant do
 
   # Client
 
-  def start_link(%State{} = state \\ %State{}) do
-    case GenServer.start_link(__MODULE__, state, name: __MODULE__) do
-      {:ok, ant} -> ant
+  def start_link(%State{} = ant \\ %State{}) do
+    case GenServer.start_link(__MODULE__, ant, name: __MODULE__) do
+      {:ok, ant_pid} -> ant_pid
       error -> error
     end
   end
 
-  def get_state(ant),
-    do: GenServer.call(ant, :state)
+  def get_state(ant_pid),
+    do: GenServer.call(ant_pid, :state)
 
   # Server
 
-  def init(state) do
-    {:ok, state}
+  def init(ant) do
+    {:ok, ant}
   end
 
-  def handle_call(:state, _from, state),
-    do: {:reply, state, state}
+  def handle_call(:state, _from, ant),
+    do: {:reply, ant, ant}
 end
