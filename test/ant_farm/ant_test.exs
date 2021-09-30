@@ -11,5 +11,12 @@ defmodule AntFarm.AntTest do
       assert is_pid(ant)
       assert Process.alive?(ant)
     end
+
+    test "get_state/1 returns ant state" do
+      ant = Ant.start_link()
+      state = ant |> Ant.get_state()
+
+      assert is_struct(state)
+    end
   end
 end
