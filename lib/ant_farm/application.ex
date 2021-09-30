@@ -13,9 +13,10 @@ defmodule AntFarm.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: AntFarm.PubSub},
       # Start the Endpoint (http/https)
-      AntFarmWeb.Endpoint
+      AntFarmWeb.Endpoint,
       # Start a worker by calling: AntFarm.Worker.start_link(arg)
       # {AntFarm.Worker, arg}
+      AntFarm.Incrementer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
