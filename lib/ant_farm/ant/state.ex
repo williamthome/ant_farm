@@ -13,9 +13,11 @@ defmodule AntFarm.Ant.State do
             speed: 0.0,
             direction: 0
 
+  @position_precision 2
+
   def move(%__MODULE__{speed: speed, direction: angle, position: {x, y}} = ant) do
-    x = Float.round(x + speed * dX(angle), 2)
-    y = Float.round(y + speed * dY(angle), 2)
+    x = Float.round(x + speed * dX(angle), @position_precision)
+    y = Float.round(y + speed * dY(angle), @position_precision)
 
     ant
     |> Map.replace!(:position, {x, y})
