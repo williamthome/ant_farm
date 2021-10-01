@@ -13,9 +13,8 @@ defmodule AntFarm.Ant do
 
   # Server
 
-  def init(ant) do
-    {:ok, ant}
-  end
+  def init(ant),
+    do: {:ok, ant}
 
   def handle_call(:state, _from, ant),
     do: {:reply, ant, ant}
