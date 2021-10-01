@@ -1,12 +1,12 @@
 defmodule AntFarm.Ant do
   use GenServer
 
-  alias __MODULE__.State
+  alias __MODULE__.State, as: Ant
 
   # Client
 
-  def start_link(%State{} = ant \\ %State{}) do
-    case GenServer.start_link(__MODULE__, ant, name: __MODULE__) do
+  def start_link(id \\ __MODULE__) do
+    case GenServer.start_link(__MODULE__, %Ant{id: id}, name: id) do
       {:ok, ant_pid} -> ant_pid
       error -> error
     end

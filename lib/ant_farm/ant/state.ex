@@ -1,5 +1,11 @@
 defmodule AntFarm.Ant.State do
   @type position :: {integer, integer}
 
-  defstruct position: {0, 0}
+  @type t :: %__MODULE__{
+          id: integer,
+          position: position
+        }
+
+  defstruct id: nil,
+            position: {0, 0}
 end
