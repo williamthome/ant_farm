@@ -18,5 +18,13 @@ defmodule AntFarm.Ant.StateTest do
 
       assert before_move.position != after_move.position
     end
+
+    test "rotate/2 rotates ant" do
+      ant =
+        %Ant{direction: 45.0}
+        |> Ant.rotate(90.0)
+
+      assert ant.direction == 135.0
+    end
   end
 end

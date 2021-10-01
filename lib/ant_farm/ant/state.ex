@@ -28,4 +28,7 @@ defmodule AntFarm.Ant.State do
 
   defp dY(angle),
     do: :math.cos(angle * :math.pi() / 180)
+
+  def rotate(%__MODULE__{direction: direction} = ant, angle),
+    do: ant |> Map.replace!(:direction, direction + angle)
 end
