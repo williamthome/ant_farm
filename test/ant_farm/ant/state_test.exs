@@ -6,25 +6,37 @@ defmodule AntFarm.Ant.StateTest do
 
   describe "ant state" do
     test "move/1 do not changes ant position if speed is zero" do
-      before_move = %Ant{speed: 0}
-      after_move = before_move |> Ant.move()
+      initial_position = {0, 0}
+      speed = 0
 
-      assert before_move.position == after_move.position
+      ant =
+        %Ant{position: initial_position, speed: speed}
+        |> Ant.move()
+
+      assert ant.position == initial_position
     end
 
     test "move/1 changes ant position if speed is more than zero" do
-      before_move = %Ant{speed: 1}
-      after_move = before_move |> Ant.move()
+      initial_position = {0, 0}
+      speed = 1
 
-      assert before_move.position != after_move.position
+      ant =
+        %Ant{position: initial_position, speed: speed}
+        |> Ant.move()
+
+      refute ant.position == initial_position
     end
 
     test "rotate/2 rotates ant" do
-      ant =
-        %Ant{direction: 45.0}
-        |> Ant.rotate(90.0)
+      initial_direction = 45.0
+      angle_to_rotate = 90.0
+      expected_direction = initial_direction + angle_to_rotate
 
-      assert ant.direction == 135.0
+      ant =
+        %Ant{direction: initial_direction}
+        |> Ant.rotate(angle_to_rotate)
+
+      assert ant.direction == expected_direction
     end
   end
 end
