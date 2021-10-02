@@ -16,7 +16,8 @@ defmodule AntFarm.Application do
       AntFarmWeb.Endpoint,
       # Start a worker by calling: AntFarm.Worker.start_link(arg)
       # {AntFarm.Worker, arg}
-      AntFarm.Incrementer
+      AntFarm.Incrementer,
+      AntFarm.Ant.Colony
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
