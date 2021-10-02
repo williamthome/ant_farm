@@ -13,6 +13,12 @@ defmodule AntFarm.Ant do
   def get_state(ant_pid),
     do: GenServer.call(ant_pid, :state)
 
+  def move(ant_pid),
+    do: GenServer.cast(ant_pid, :move)
+
+  def rotate(ant_pid, angle),
+    do: GenServer.cast(ant_pid, {:rotate, angle})
+
   # Server
 
   def init(ant),
@@ -26,4 +32,10 @@ defmodule AntFarm.Ant do
 
   def handle_call(:state, _from, ant),
     do: {:reply, ant, ant}
+
+  def handle_cast(:move, ant),
+    do: {:noreply, ant |> Ant.move()}
+
+  def handle_cast({:rotate, angle}, ant),
+    do: {:noreply, ant |> Ant.rotate(angle)}
 end
