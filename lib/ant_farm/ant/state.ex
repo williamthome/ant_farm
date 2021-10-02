@@ -51,6 +51,9 @@ defmodule AntFarm.Ant.State do
   @doc """
   Rotate ant by the sum of it's direction and the angle provided.
   """
+  def rotate(%__MODULE__{} = ant, angle) when angle > 360,
+    do: ant |> rotate(angle - 360)
+
   def rotate(%__MODULE__{direction: direction} = ant, angle),
     do: ant |> Map.replace!(:direction, direction + angle)
 end

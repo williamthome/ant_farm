@@ -38,5 +38,17 @@ defmodule AntFarm.Ant.StateTest do
 
       assert ant.direction == expected_direction
     end
+
+    test "rotate/2 should limit direction to 360 degrees" do
+      initial_direction = 0
+      angle_to_rotate = 365
+      expected_direction = angle_to_rotate - 360
+
+      ant =
+        %Ant{direction: initial_direction}
+        |> Ant.rotate(angle_to_rotate)
+
+      assert ant.direction == expected_direction
+    end
   end
 end
