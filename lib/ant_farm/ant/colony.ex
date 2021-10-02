@@ -3,6 +3,7 @@ defmodule AntFarm.Ant.Colony do
 
   alias AntFarm.Ant, as: AntServer
   alias AntFarm.Ant.State, as: Ant
+  alias AntFarm.Incrementer
 
   @me __MODULE__
 
@@ -16,6 +17,9 @@ defmodule AntFarm.Ant.Colony do
 
     DynamicSupervisor.start_child(@me, spec)
   end
+
+  def populate(count \\ 1),
+    do: for(_ <- 1..count, do: start_child(%Ant{id: Incrementer.increment()}))
 
   # Server
 
