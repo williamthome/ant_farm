@@ -1,5 +1,14 @@
 defmodule AntFarm.Ant.State do
-  @type position :: {float, float}
+  @moduledoc """
+  Ant state.
+  """
+
+  @typedoc """
+  Ant position.
+
+  First tuple arg is x axis and the second is y axis.
+  """
+  @type position :: {x :: float, y :: float}
 
   @type t :: %__MODULE__{
           id: integer,
@@ -15,6 +24,10 @@ defmodule AntFarm.Ant.State do
 
   @position_precision 2
 
+  @doc """
+  Move ant based on i'ts direction and speed.
+  """
+  @spec move(ant :: t) :: t
   def move(%__MODULE__{speed: speed, direction: angle, position: {x, y}} = ant) do
     position = {
       x |> axis_direction(speed, angle, :x),
@@ -35,6 +48,9 @@ defmodule AntFarm.Ant.State do
   defp ratio(angle, :y), do: :math.cos(angle |> to_rad)
   defp to_rad(angle), do: angle * :math.pi() / 180
 
+  @doc """
+  Rotate ant by the sum of it's direction and the angle provided.
+  """
   def rotate(%__MODULE__{direction: direction} = ant, angle),
     do: ant |> Map.replace!(:direction, direction + angle)
 end
