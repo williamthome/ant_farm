@@ -7,8 +7,8 @@ defmodule AntFarm.Ant do
 
   # Client
 
-  def start_link(id \\ @me),
-    do: GenServer.start_link(@me, %Ant{id: id}, name: id)
+  def start_link(%Ant{id: id} = ant \\ %Ant{id: @me, speed: 1.0}),
+    do: GenServer.start_link(@me, ant, name: id)
 
   def get_state(ant_pid),
     do: GenServer.call(ant_pid, :state)
