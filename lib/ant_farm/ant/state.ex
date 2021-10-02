@@ -16,18 +16,24 @@ defmodule AntFarm.Ant.State do
   @position_precision 2
 
   def move(%__MODULE__{speed: speed, direction: angle, position: {x, y}} = ant) do
-    x = Float.round(x + speed * dX(angle), @position_precision)
-    y = Float.round(y + speed * dY(angle), @position_precision)
+    position = {
+      x |> axis_direction(speed, angle, :x),
+      y |> axis_direction(speed, angle, :y)
+    }
 
     ant
-    |> Map.replace!(:position, {x, y})
+    |> Map.replace!(:position, position)
   end
 
-  defp dX(angle),
-    do: :math.sin(angle * :math.pi() / 180)
+  defp axis_direction(current_direction, speed, angle, axis),
+    do:
+      current_direction
+      |> Kernel.+(speed * ratio(angle, axis))
+      |> Float.round(@position_precision)
 
-  defp dY(angle),
-    do: :math.cos(angle * :math.pi() / 180)
+  defp ratio(angle, :x), do: :math.sin(angle |> to_rad)
+  defp ratio(angle, :y), do: :math.cos(angle |> to_rad)
+  defp to_rad(angle), do: angle * :math.pi() / 180
 
   def rotate(%__MODULE__{direction: direction} = ant, angle),
     do: ant |> Map.replace!(:direction, direction + angle)
