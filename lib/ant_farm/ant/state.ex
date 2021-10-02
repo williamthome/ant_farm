@@ -11,12 +11,13 @@ defmodule AntFarm.Ant.State do
   @type position :: {x :: float, y :: float}
 
   @type t :: %__MODULE__{
-          id: integer,
+          id: non_neg_integer,
           position: position,
           speed: float,
           direction: 0..360
         }
 
+  @enforce_keys [:id]
   defstruct id: nil,
             position: {0.0, 0.0},
             speed: 0.0,

@@ -10,7 +10,7 @@ defmodule AntFarm.Ant.StateTest do
       speed = 0
 
       ant =
-        %Ant{position: initial_position, speed: speed}
+        %Ant{id: 0, position: initial_position, speed: speed}
         |> Ant.move()
 
       assert ant.position == initial_position
@@ -21,7 +21,7 @@ defmodule AntFarm.Ant.StateTest do
       speed = 1
 
       ant =
-        %Ant{position: initial_position, speed: speed}
+        %Ant{id: 0, position: initial_position, speed: speed}
         |> Ant.move()
 
       refute ant.position == initial_position
@@ -33,7 +33,7 @@ defmodule AntFarm.Ant.StateTest do
       expected_direction = initial_direction + angle_to_rotate
 
       ant =
-        %Ant{direction: initial_direction}
+        %Ant{id: 0, direction: initial_direction}
         |> Ant.rotate(angle_to_rotate)
 
       assert ant.direction == expected_direction
@@ -45,7 +45,7 @@ defmodule AntFarm.Ant.StateTest do
       expected_direction = angle_to_rotate - 360
 
       ant =
-        %Ant{direction: initial_direction}
+        %Ant{id: 0, direction: initial_direction}
         |> Ant.rotate(angle_to_rotate)
 
       assert ant.direction == expected_direction
