@@ -8,7 +8,10 @@ defmodule AntFarm.Ant do
   # Client
 
   def start_link(%Ant{id: id} = ant \\ %Ant{id: @me, speed: 1.0}),
-    do: GenServer.start_link(@me, ant, name: id)
+    do: GenServer.start_link(@me, ant, name: do_name(id))
+
+  defp do_name(name),
+    do: String.to_atom("ant::" <> to_string(name))
 
   def get_state(ant_pid),
     do: GenServer.call(ant_pid, :state)
@@ -27,7 +30,7 @@ defmodule AntFarm.Ant do
   def child_spec(id),
     do: %{
       id: id,
-      start: {@me, :start_link, id}
+      start: {@me, :start_link, [id]}
     }
 
   def handle_call(:state, _from, ant),
