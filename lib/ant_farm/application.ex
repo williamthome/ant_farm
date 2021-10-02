@@ -14,9 +14,9 @@ defmodule AntFarm.Application do
       {Phoenix.PubSub, name: AntFarm.PubSub},
       # Start the Endpoint (http/https)
       AntFarmWeb.Endpoint,
-      # Start a worker by calling: AntFarm.Worker.start_link(arg)
-      # {AntFarm.Worker, arg}
+      # Start the Incrementer supervisor
       AntFarm.Incrementer,
+      # Start the Ant Colony dynamic supervisor
       AntFarm.Ant.Colony
     ]
 
