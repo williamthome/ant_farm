@@ -20,7 +20,7 @@ defmodule AntFarm.Ant.State do
   @enforce_keys [:id]
   defstruct id: nil,
             position: {0.0, 0.0},
-            speed: 0.0,
+            speed: 1.0,
             direction: 0
 
   @position_precision 2
