@@ -14,10 +14,10 @@ defmodule AntFarmWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", AntFarmWeb do
+  scope "/", AntFarmWeb.Live do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", PageLive
   end
 
   # Other scopes may use custom stacks.
