@@ -8,19 +8,19 @@ defmodule AntFarm.Ant do
   # Client
 
   def start_link(%Ant{id: id} = ant \\ %Ant{id: @me, speed: 1.0}),
-    do: GenServer.start_link(@me, ant, name: do_name(id))
+    do: GenServer.start_link(@me, ant, name: name(id))
 
-  defp do_name(name),
-    do: String.to_atom("ant::" <> to_string(name))
+  defp name(id),
+    do: {:via, Registry, {AntFarm.Ant.Registry, id}}
 
-  def get_state(ant_pid),
-    do: GenServer.call(ant_pid, :state)
+  def get_state(id),
+    do: GenServer.call(name(id), :state)
 
-  def move(ant_pid),
-    do: GenServer.cast(ant_pid, :move)
+  def move(id),
+    do: GenServer.cast(name(id), :move)
 
-  def rotate(ant_pid, angle),
-    do: GenServer.cast(ant_pid, {:rotate, angle})
+  def rotate(id, angle),
+    do: GenServer.cast(name(id), {:rotate, angle})
 
   # Server
 

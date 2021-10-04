@@ -14,6 +14,8 @@ defmodule AntFarm.Application do
       {Phoenix.PubSub, name: AntFarm.PubSub},
       # Start the Endpoint (http/https)
       AntFarmWeb.Endpoint,
+      # Create the Ant Registry
+      {Registry, keys: :unique, name: AntFarm.Ant.Registry},
       # Start the Incrementer supervisor
       AntFarm.Incrementer,
       # Start the Ant Colony dynamic supervisor
