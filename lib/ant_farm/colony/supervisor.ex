@@ -22,6 +22,11 @@ defmodule AntFarm.Colony.Supervisor do
     for _ <- 1..count, do: add(%Ant{id: Incrementer.increment()})
   end
 
+  def ant_count do
+    %{workers: count} = @me |> DynamicSupervisor.count_children()
+    count
+  end
+
   def ants,
     do:
       @me
