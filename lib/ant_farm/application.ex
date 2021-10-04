@@ -19,7 +19,7 @@ defmodule AntFarm.Application do
       # Start the Incrementer supervisor
       AntFarm.Incrementer,
       # Start the Ant Colony dynamic supervisor
-      AntFarm.Ant.Colony
+      AntFarm.Colony.Supervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -1,8 +1,8 @@
-defmodule AntFarm.Ant.Colony do
+defmodule AntFarm.Colony.Supervisor do
   use DynamicSupervisor
 
-  alias AntFarm.Ant, as: AntServer
-  alias AntFarm.Ant.State, as: Ant
+  alias AntFarm.Ant.Boundary, as: AntServer
+  alias AntFarm.Ant.Core, as: Ant
   alias AntFarm.Incrementer
 
   @me __MODULE__
@@ -12,14 +12,15 @@ defmodule AntFarm.Ant.Colony do
   def start_link(_args),
     do: DynamicSupervisor.start_link(@me, :ok, name: @me)
 
-  def start_child(%Ant{} = ant \\ %Ant{id: 0}) do
+  def add(%Ant{} = ant) do
     spec = {AntServer, ant}
 
     DynamicSupervisor.start_child(@me, spec)
   end
 
-  def populate(count \\ 1),
-    do: for(_ <- 1..count, do: start_child(%Ant{id: Incrementer.increment()}))
+  def populate(count \\ 1) do
+    for _ <- 1..count, do: add(%Ant{id: Incrementer.increment()})
+  end
 
   def ants,
     do:
@@ -42,7 +43,7 @@ defmodule AntFarm.Ant.Colony do
       end)
       |> Enum.map(fn {:ok, result} -> result end)
 
-  # Server
+  # AntServer
 
   def init(:ok),
     do: DynamicSupervisor.init(strategy: :one_for_one)

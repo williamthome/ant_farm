@@ -1,6 +1,6 @@
-defmodule AntFarm.Ant.State do
+defmodule AntFarm.Ant.Core do
   @moduledoc """
-  Ant state.
+  Ant core.
   """
 
   @typedoc """
@@ -23,7 +23,13 @@ defmodule AntFarm.Ant.State do
             speed: 1.0,
             direction: 0
 
+  @me __MODULE__
   @position_precision 2
+
+  def new!(fields),
+    do:
+      @me
+      |> struct!(fields)
 
   @doc """
   Move ant based on i'ts direction and speed.

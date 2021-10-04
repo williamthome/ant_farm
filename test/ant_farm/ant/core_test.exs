@@ -1,10 +1,10 @@
-defmodule AntFarm.Ant.StateTest do
+defmodule AntFarm.Ant.CoreTest do
   use ExUnit.Case
-  doctest AntFarm.Ant.State
+  doctest AntFarm.Ant.Core
 
-  alias AntFarm.Ant.State, as: Ant
+  alias AntFarm.Ant.Core, as: Ant
 
-  describe "ant state" do
+  describe "ant core" do
     test "move/1 do not changes ant position if speed is zero" do
       initial_position = {0, 0}
       speed = 0
