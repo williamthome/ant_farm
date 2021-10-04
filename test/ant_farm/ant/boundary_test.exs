@@ -13,11 +13,24 @@ defmodule AntFarm.Ant.BoundaryTest do
       assert Process.alive?(ant)
     end
 
-    test "get_state/1 returns ant state" do
-      {:ok, ant} = AntServer.start_link(%Ant{id: 0})
+    test "get_state/1 returns ant state by pid" do
+      id = 0
+
+      {:ok, ant} = AntServer.start_link(%Ant{id: id})
       state = AntServer.get_state(ant)
 
       assert is_struct(state)
+      assert state.id == id
+    end
+
+    test "get_state/1 returns ant state by id" do
+      id = 0
+
+      AntServer.start_link(%Ant{id: id})
+      state = AntServer.get_state(id)
+
+      assert is_struct(state)
+      assert state.id == id
     end
   end
 end
