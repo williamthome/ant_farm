@@ -27,10 +27,10 @@ defmodule AntFarm.Ant do
   def init(ant),
     do: {:ok, ant}
 
-  def child_spec(id),
+  def child_spec(%Ant{id: id} = ant),
     do: %{
-      id: id,
-      start: {@me, :start_link, [id]}
+      id: name(id),
+      start: {@me, :start_link, [ant]}
     }
 
   def handle_call(:state, _from, ant),
