@@ -27,17 +27,14 @@ defmodule AntFarmWeb.Live.PageLive do
     ~H"""
     <div class="main-content">
       <h2>Rendering <%= length(@ants) %> concurrent ants</h2>
-      <svg viewbox="0 0 1024 600">
-        <rect width="1024" height="600" fill="#00b349"/>
-        <%= for %Ant{position: {x, y}} <- @ants do %>
-          <%= live_component Components.Ant,
-            size: 2,
-            color: "#000000",
-            x: x,
-            y: y
-          %>
-        <% end %>
-      </svg>
+      <%= live_component Components.Colony,
+        width: 1024,
+        height: 600,
+        background_color: "green",
+        ants: @ants,
+        ant_size: 2,
+        ant_color: "#000000"
+      %>
     </div>
     """
   end
