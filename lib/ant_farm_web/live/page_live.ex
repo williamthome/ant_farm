@@ -1,6 +1,7 @@
 defmodule AntFarmWeb.Live.PageLive do
   use AntFarmWeb, :live_view
 
+  alias AntFarmWeb.Live.Components
   alias AntFarm.Ant.Core, as: Ant
 
   def mount(_args, _session, socket) do
@@ -29,7 +30,12 @@ defmodule AntFarmWeb.Live.PageLive do
       <svg viewbox="0 0 1024 600">
         <rect width="1024" height="600" fill="#00b349"/>
         <%= for %Ant{position: {x, y}} <- @ants do %>
-          <rect width="2" height="2" fill="#000000" x={x} y={y}/>
+          <%= live_component Components.Ant,
+            size: 2,
+            color: "#000000",
+            x: x,
+            y: y
+          %>
         <% end %>
       </svg>
     </div>
