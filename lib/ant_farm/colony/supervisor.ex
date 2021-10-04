@@ -18,6 +18,12 @@ defmodule AntFarm.Colony.Supervisor do
     DynamicSupervisor.start_child(@me, spec)
   end
 
+  def add!(fields),
+    do:
+      fields
+      |> Ant.new!()
+      |> add()
+
   def populate(count \\ 1) do
     for _ <- 1..count, do: add(%Ant{id: Incrementer.increment()})
   end

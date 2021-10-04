@@ -4,6 +4,9 @@ defmodule AntFarm.Colony do
   def add(ant),
     do: ant |> AntColony.add()
 
+  def add!(fields),
+    do: fields |> AntColony.add!()
+
   def populate(count \\ 1),
     do: count |> AntColony.populate()
 
