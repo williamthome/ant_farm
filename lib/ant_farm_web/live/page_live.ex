@@ -2,31 +2,23 @@ defmodule AntFarmWeb.Live.PageLive do
   use AntFarmWeb, :live_view
 
   alias AntFarmWeb.Live.Components
-  alias AntFarm.Ant.Core, as: Ant
+  alias AntFarm.Colony
 
   def mount(_args, _session, socket) do
-    ants = [
-      %Ant{id: 0, position: {50, 50}},
-      %Ant{id: 1, position: {100, 50}},
-      %Ant{id: 2, position: {150, 150}},
-      %Ant{id: 3, position: {350, 250}},
-      %Ant{id: 4, position: {450, 450}},
-      %Ant{id: 5, position: {650, 850}}
-    ]
+    Colony.add!(id: 0, position: {50, 50})
+    Colony.add!(id: 1, position: {100, 50})
+    Colony.add!(id: 2, position: {150, 150})
+    Colony.add!(id: 3, position: {350, 250})
+    Colony.add!(id: 4, position: {450, 450})
+    Colony.add!(id: 5, position: {650, 850})
 
-    IO.inspect(ants)
-
-    socket =
-      socket
-      |> assign(:ants, ants)
-
-    {:ok, socket}
+    {:ok, socket |> assign_ants()}
   end
 
   def render(assigns) do
     ~H"""
     <div class="main-content">
-      <h2>Rendering <%= length(@ants) %> concurrent ants</h2>
+      <h2>Rendering <%= @ant_count %> concurrent ants</h2>
       <%= live_component Components.Colony,
         width: 1024,
         height: 600,
@@ -38,4 +30,10 @@ defmodule AntFarmWeb.Live.PageLive do
     </div>
     """
   end
+
+  defp assign_ants(socket),
+    do:
+      socket
+      |> assign(:ants, Colony.ants())
+      |> assign(:ant_count, Colony.ant_count())
 end
