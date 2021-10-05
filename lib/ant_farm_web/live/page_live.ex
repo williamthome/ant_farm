@@ -55,7 +55,11 @@ defmodule AntFarmWeb.Live.PageLive do
   def handle_info(:tick, socket) do
     schedule()
 
-    {:noreply, socket |> assign_ants()}
+    socket =
+      socket
+      |> assign_ants()
+
+    {:noreply, socket}
   end
 
   defp schedule,
