@@ -10,18 +10,22 @@ defmodule AntFarm.Ant.Core do
   """
   @type position :: {x :: float, y :: float}
 
+  @type action :: :walking | :resting
+
   @type t :: %__MODULE__{
           id: non_neg_integer,
           position: position,
           speed: float,
-          direction: 0..360
+          direction: 0..360,
+          action: action
         }
 
   @enforce_keys [:id]
   defstruct id: nil,
             position: {0.0, 0.0},
             speed: 1.0,
-            direction: 0
+            direction: 0,
+            action: :walking
 
   @me __MODULE__
   @position_precision 2
