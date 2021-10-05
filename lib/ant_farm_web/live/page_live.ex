@@ -49,18 +49,21 @@ defmodule AntFarmWeb.Live.PageLive do
     """
   end
 
-  defp assign_ants(socket),
-    do:
-      socket
-      |> assign(:ants, Colony.ants())
-      |> assign(:ant_count, Colony.ant_count())
+  defp assign_ants(socket) do
+    ants =
+      Colony.ants()
+      |> Task.async_stream(fn ant ->
+        if ant.position |> out_of_bounds(), do: ant.id |> Ant.rotate(180)
+        ant
+      end)
+      |> Enum.map(fn {:ok, ant} -> ant end)
+
+    socket
+    |> assign(:ants, ants)
+    |> assign(:ant_count, Colony.ant_count())
+  end
 
   def handle_info(:tick, socket) do
-    Colony.ants()
-    |> Enum.each(fn ant ->
-      if ant.position |> out_of_bounds(), do: ant.id |> Ant.rotate(180)
-    end)
-
     socket =
       socket
       |> assign_ants()
