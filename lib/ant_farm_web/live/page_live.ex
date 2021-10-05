@@ -26,6 +26,7 @@ defmodule AntFarmWeb.Live.PageLive do
     <div class="main-content">
       <h2>Rendering <%= @ant_count %> concurrent ants</h2>
       <%= live_component Components.Colony,
+        id: "colony",
         width: 1024,
         height: 600,
         background_color: "green",

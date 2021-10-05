@@ -8,8 +8,9 @@ defmodule AntFarmWeb.Live.Components.Colony do
     ~H"""
     <svg viewbox={"0 0 #{@width} #{@height}"}>
       <rect width={@width} height={@height} fill={@background_color}/>
-      <%= for %Ant{position: {x, y}} <- @ants do %>
+      <%= for %Ant{id: id, position: {x, y}} <- @ants do %>
         <%= live_component Components.Ant,
+          id: id,
           size: @ant_size,
           color: @ant_color,
           x: x,
