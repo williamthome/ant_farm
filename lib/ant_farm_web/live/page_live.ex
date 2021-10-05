@@ -4,6 +4,10 @@ defmodule AntFarmWeb.Live.PageLive do
   alias AntFarmWeb.Live.Components
   alias AntFarm.Colony
 
+  @one_second 1_000
+  @fps 20
+  @timeout round(@one_second / @fps)
+
   def mount(_args, _session, socket) do
     Colony.add!(id: 0, position: {50, 50})
     Colony.add!(id: 1, position: {100, 50})
@@ -11,6 +15,8 @@ defmodule AntFarmWeb.Live.PageLive do
     Colony.add!(id: 3, position: {350, 250})
     Colony.add!(id: 4, position: {450, 450})
     Colony.add!(id: 5, position: {650, 850})
+
+    schedule()
 
     {:ok, socket |> assign_ants()}
   end
@@ -36,4 +42,13 @@ defmodule AntFarmWeb.Live.PageLive do
       socket
       |> assign(:ants, Colony.ants())
       |> assign(:ant_count, Colony.ant_count())
+
+  def handle_info(:tick, socket) do
+    schedule()
+
+    {:noreply, socket |> assign_ants()}
+  end
+
+  defp schedule,
+    do: Process.send_after(self(), :tick, @timeout)
 end
