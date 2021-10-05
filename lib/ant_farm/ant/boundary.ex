@@ -6,6 +6,7 @@ defmodule AntFarm.Ant.Boundary do
   @me __MODULE__
   @walking_timeout_range 30..100
   @resting_timeout_range 1_000..2_000
+  @rotate_range 0..360
 
   # Client
 
@@ -48,11 +49,13 @@ defmodule AntFarm.Ant.Boundary do
 
   defp action_timeout(:walking), do: @walking_timeout_range |> Enum.random()
   defp action_timeout(:resting), do: @resting_timeout_range |> Enum.random()
+  defp action_timeout(:rotating), do: @resting_timeout_range |> Enum.random()
 
   def handle_info({:perform_action, action}, ant) do
     ant =
       ant
       |> maybe_move?(action)
+      |> maybe_rotate?(action)
       |> Map.replace!(:action, action)
 
     random_action() |> schedule()
@@ -61,14 +64,20 @@ defmodule AntFarm.Ant.Boundary do
   end
 
   defp random_action do
-    case Enum.random(0..100) < 98 do
-      true -> :walking
-      false -> :resting
+    case Enum.random(0..100) do
+      result when result < 98 -> :walking
+      result when result < 99 -> :rotating
+      _ -> :resting
     end
   end
 
   defp maybe_move?(%Ant{} = ant, :walking), do: ant |> Ant.move()
   defp maybe_move?(%Ant{} = ant, _action), do: ant
+
+  defp maybe_rotate?(%Ant{} = ant, :rotating),
+    do: ant |> Ant.rotate(@rotate_range |> Enum.random())
+
+  defp maybe_rotate?(%Ant{} = ant, _action), do: ant
 
   def handle_call(:state, _from, ant),
     do: {:reply, ant, ant}

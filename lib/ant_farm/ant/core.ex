@@ -10,7 +10,7 @@ defmodule AntFarm.Ant.Core do
   """
   @type position :: {x :: float, y :: float}
 
-  @type action :: :walking | :resting
+  @type action :: :walking | :resting | :rotating
 
   @type t :: %__MODULE__{
           id: non_neg_integer,
