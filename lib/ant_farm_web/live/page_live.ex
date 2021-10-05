@@ -4,7 +4,7 @@ defmodule AntFarmWeb.Live.PageLive do
   alias AntFarmWeb.Live.Components
   alias AntFarm.{Ant, Colony}
 
-  @ants 100
+  @initial_ant_count 100
   @speed_range 1..3
 
   @one_second 1_000
@@ -16,11 +16,12 @@ defmodule AntFarmWeb.Live.PageLive do
     colony_height: 600,
     colony_color: "green",
     ant_size: 2,
-    ant_color: "black"
+    ant_color: "black",
+    population_limit: 500
   }
 
   def mount(_args, _session, socket) do
-    spawn_ants(@ants, speed_range: @speed_range)
+    spawn_ants(@initial_ant_count)
 
     schedule()
 
@@ -35,7 +36,25 @@ defmodule AntFarmWeb.Live.PageLive do
   def render(assigns) do
     ~H"""
     <div class="main-content">
-      <h2>Rendering <%= @ant_count %> concurrent ants</h2>
+      <form
+        phx-change="spawn_ants"
+        onkeydown="return event.key != 'Enter';"
+      >
+        <h2
+          style="display: grid; grid-template-columns: auto 1fr auto; column-gap: 1rem; align-items: center;"
+        >
+          <span>Rendering</span>
+          <input
+            type="number"
+            name="count"
+            value={@ant_count}
+            min={1}
+            max={@population_limit}
+            style="margin-bottom: 0;"
+          />
+          <span>concurrent ants</span>
+        </h2>
+      </form>
       <%= live_component Components.Colony,
         id: "colony",
         width: @colony_width,
@@ -47,6 +66,27 @@ defmodule AntFarmWeb.Live.PageLive do
       %>
     </div>
     """
+  end
+
+  def handle_event("spawn_ants", %{"count" => count}, socket) do
+    count = count |> String.to_integer()
+    limit = socket.assigns.population_limit
+
+    socket =
+      case count <= limit do
+        true ->
+          spawn_ants(count)
+          socket |> clear_flash()
+
+        false ->
+          socket |> put_flash(:error, "Population limit is #{limit}")
+      end
+
+    {:noreply, socket}
+  rescue
+    ArgumentError ->
+      spawn_ants(1)
+      {:noreply, socket}
   end
 
   defp assign_ants(socket) do
@@ -76,7 +116,7 @@ defmodule AntFarmWeb.Live.PageLive do
   defp schedule,
     do: Process.send_after(self(), :tick, @timeout)
 
-  defp spawn_ants(count, speed_range: speed_range) do
+  defp spawn_ants(count) do
     Colony.unpopulate()
 
     for id <- 1..count do
@@ -86,7 +126,7 @@ defmodule AntFarmWeb.Live.PageLive do
           Enum.random(0..@config.colony_width),
           Enum.random(0..@config.colony_height)
         },
-        speed: Enum.random(speed_range),
+        speed: Enum.random(@speed_range),
         direction: Enum.random(0..360)
       )
     end
