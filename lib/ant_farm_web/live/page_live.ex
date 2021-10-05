@@ -4,8 +4,11 @@ defmodule AntFarmWeb.Live.PageLive do
   alias AntFarmWeb.Live.Components
   alias AntFarm.Colony
 
+  @ants 100
+  @speed_range 1..3
+
   @one_second 1_000
-  @fps 20
+  @fps 30
   @timeout round(@one_second / @fps)
 
   @config %{
@@ -17,7 +20,7 @@ defmodule AntFarmWeb.Live.PageLive do
   }
 
   def mount(_args, _session, socket) do
-    spawn_ants(20, speed_range: 1..3)
+    spawn_ants(@ants, speed_range: @speed_range)
 
     schedule()
 

@@ -4,7 +4,10 @@ defmodule AntFarm.Ant.Boundary do
   alias AntFarm.Ant.Core, as: Ant
 
   @me __MODULE__
-  @walking_timeout_range 30..100
+
+  @one_second 1_000
+  @fps 30
+  @walking_timeout round(@one_second / @fps)
   @resting_timeout_range 1_000..2_000
   @rotate_range 0..360
 
@@ -47,7 +50,7 @@ defmodule AntFarm.Ant.Boundary do
       self()
       |> Process.send_after({:perform_action, action}, action |> action_timeout())
 
-  defp action_timeout(:walking), do: @walking_timeout_range |> Enum.random()
+  defp action_timeout(:walking), do: @walking_timeout
   defp action_timeout(:resting), do: @resting_timeout_range |> Enum.random()
   defp action_timeout(:rotating), do: @resting_timeout_range |> Enum.random()
 
