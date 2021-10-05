@@ -3,12 +3,11 @@ defmodule AntFarmWeb.Live.Components.Ant do
 
   def render(assigns) do
     ~H"""
-    <rect
-      width={@size}
-      height={@size}
+    <circle
+      r={@size}
       fill={@color}
-      x={@x}
-      y={@y}
+      cx={@x}
+      cy={@y}
     />
     """
   end
