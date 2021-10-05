@@ -66,13 +66,9 @@ defmodule AntFarmWeb.Live.PageLive do
     do: Process.send_after(self(), :tick, @timeout)
 
   defp spawn_ants(count, speed_range: speed_range) do
-    ant_count = Colony.ant_count()
+    Colony.unpopulate()
 
-    first_id = 1 + ant_count
-    last_id = count + ant_count
-    id_range = first_id..last_id
-
-    for id <- id_range do
+    for id <- 1..count do
       Colony.add!(
         id: id,
         position: {

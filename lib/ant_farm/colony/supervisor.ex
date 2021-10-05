@@ -28,6 +28,13 @@ defmodule AntFarm.Colony.Supervisor do
     for _ <- 1..count, do: add(%Ant{id: Incrementer.increment()})
   end
 
+  def unpopulate do
+    for pid <- childrens_pid() do
+      @me
+      |> DynamicSupervisor.terminate_child(pid)
+    end
+  end
+
   def ant_count do
     %{workers: count} = @me |> DynamicSupervisor.count_children()
     count
@@ -35,13 +42,17 @@ defmodule AntFarm.Colony.Supervisor do
 
   def ants,
     do:
+      childrens_pid()
+      |> Enum.map(&AntServer.get_state(&1))
+
+  defp childrens_pid,
+    do:
       @me
       |> DynamicSupervisor.which_children()
-      |> Task.async_stream(&get_ant_state/1)
+      |> Task.async_stream(&get_chilren_pid/1)
       |> filter_successful_tasks()
 
-  defp get_ant_state({_id, ant_pid, _type, _modules}),
-    do: ant_pid |> AntServer.get_state()
+  defp get_chilren_pid({_id, pid, _type, _modules}), do: pid
 
   defp filter_successful_tasks(tasks),
     do:

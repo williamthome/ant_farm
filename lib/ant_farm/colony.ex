@@ -10,6 +10,9 @@ defmodule AntFarm.Colony do
   def populate(count \\ 1),
     do: count |> AntColony.populate()
 
+  def unpopulate,
+    do: AntColony.unpopulate()
+
   def ant_count,
     do: AntColony.ant_count()
 
