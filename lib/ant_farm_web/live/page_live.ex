@@ -2,7 +2,7 @@ defmodule AntFarmWeb.Live.PageLive do
   use AntFarmWeb, :live_view
 
   alias AntFarmWeb.Live.Components
-  alias AntFarm.Colony
+  alias AntFarm.{Ant, Colony}
 
   @ants 100
   @speed_range 1..3
@@ -56,11 +56,16 @@ defmodule AntFarmWeb.Live.PageLive do
       |> assign(:ant_count, Colony.ant_count())
 
   def handle_info(:tick, socket) do
-    schedule()
+    Colony.ants()
+    |> Enum.each(fn ant ->
+      if ant.position |> out_of_bounds(), do: ant.id |> Ant.rotate(180)
+    end)
 
     socket =
       socket
       |> assign_ants()
+
+    schedule()
 
     {:noreply, socket}
   end
@@ -83,4 +88,7 @@ defmodule AntFarmWeb.Live.PageLive do
       )
     end
   end
+
+  defp out_of_bounds({x, y}),
+    do: x < 0 or x > @config.colony_width or y < 0 or y > @config.colony_height
 end
