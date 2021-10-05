@@ -41,13 +41,13 @@ defmodule AntFarm.Ant.Boundary do
       start: {@me, :start_link, [ant]}
     }
 
-  defp schedule(:walking = action), do: action |> schedule(@walking_timeout_range)
-  defp schedule(:resting = action), do: action |> schedule(@resting_timeout_range)
-
-  defp schedule(action, timeout_range),
+  defp schedule(action),
     do:
       self()
-      |> Process.send_after({:perform_action, action}, timeout_range |> Enum.random())
+      |> Process.send_after({:perform_action, action}, action |> action_timeout())
+
+  defp action_timeout(:walking), do: @walking_timeout_range |> Enum.random()
+  defp action_timeout(:resting), do: @resting_timeout_range |> Enum.random()
 
   def handle_info({:perform_action, action}, ant) do
     ant =
