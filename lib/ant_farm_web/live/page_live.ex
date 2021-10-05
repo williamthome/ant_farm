@@ -17,12 +17,7 @@ defmodule AntFarmWeb.Live.PageLive do
   }
 
   def mount(_args, _session, socket) do
-    Colony.add!(id: 0, position: {50, 50})
-    Colony.add!(id: 1, position: {100, 50})
-    Colony.add!(id: 2, position: {150, 150})
-    Colony.add!(id: 3, position: {350, 250})
-    Colony.add!(id: 4, position: {450, 450})
-    Colony.add!(id: 5, position: {650, 850})
+    spawn_ants(20, speed_range: 1..3)
 
     schedule()
 
@@ -65,4 +60,24 @@ defmodule AntFarmWeb.Live.PageLive do
 
   defp schedule,
     do: Process.send_after(self(), :tick, @timeout)
+
+  defp spawn_ants(count, speed_range: speed_range) do
+    ant_count = Colony.ant_count()
+
+    first_id = 1 + ant_count
+    last_id = count + ant_count
+    id_range = first_id..last_id
+
+    for id <- id_range do
+      Colony.add!(
+        id: id,
+        position: {
+          Enum.random(0..@config.colony_width),
+          Enum.random(0..@config.colony_height)
+        },
+        speed: Enum.random(speed_range),
+        direction: Enum.random(0..360)
+      )
+    end
+  end
 end
