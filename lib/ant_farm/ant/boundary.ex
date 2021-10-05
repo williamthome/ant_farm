@@ -9,11 +9,11 @@ defmodule AntFarm.Ant.Boundary do
 
   # Client
 
-  def start_link(%Ant{id: id} = ant),
-    do: GenServer.start_link(@me, ant, name: name(id))
+  def start_link(%Ant{} = ant),
+    do: GenServer.start_link(@me, ant, name: ant |> name())
 
-  defp name(id),
-    do: {:via, Registry, {AntFarm.Ant.Registry, id}}
+  defp name(%Ant{id: id}), do: id |> name()
+  defp name(id), do: {:via, Registry, {AntFarm.Ant.Registry, id}}
 
   def get_state(id) when id |> is_pid,
     do: GenServer.call(id, :state)
@@ -35,9 +35,9 @@ defmodule AntFarm.Ant.Boundary do
     {:ok, ant}
   end
 
-  def child_spec(%Ant{id: id} = ant),
+  def child_spec(%Ant{} = ant),
     do: %{
-      id: name(id),
+      id: ant |> name(),
       start: {@me, :start_link, [ant]}
     }
 
