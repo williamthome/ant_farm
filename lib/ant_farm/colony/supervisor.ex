@@ -50,20 +50,9 @@ defmodule AntFarm.Colony.Supervisor do
       @me
       |> DynamicSupervisor.which_children()
       |> Task.async_stream(&get_chilren_pid/1)
-      |> filter_successful_tasks()
+      |> Enum.map(fn {:ok, pid} -> pid end)
 
   defp get_chilren_pid({_id, pid, _type, _modules}), do: pid
-
-  defp filter_successful_tasks(tasks),
-    do:
-      tasks
-      |> Enum.filter(fn task ->
-        case task do
-          {:ok, _result} -> true
-          {:exit, _reason} -> false
-        end
-      end)
-      |> Enum.map(fn {:ok, result} -> result end)
 
   # AntServer
 
