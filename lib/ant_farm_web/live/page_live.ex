@@ -8,6 +8,14 @@ defmodule AntFarmWeb.Live.PageLive do
   @fps 20
   @timeout round(@one_second / @fps)
 
+  @config %{
+    colony_width: 1024,
+    colony_height: 600,
+    colony_color: "green",
+    ant_size: 2,
+    ant_color: "black"
+  }
+
   def mount(_args, _session, socket) do
     Colony.add!(id: 0, position: {50, 50})
     Colony.add!(id: 1, position: {100, 50})
@@ -18,7 +26,12 @@ defmodule AntFarmWeb.Live.PageLive do
 
     schedule()
 
-    {:ok, socket |> assign_ants()}
+    socket =
+      socket
+      |> assign(@config)
+      |> assign_ants()
+
+    {:ok, socket}
   end
 
   def render(assigns) do
@@ -27,12 +40,12 @@ defmodule AntFarmWeb.Live.PageLive do
       <h2>Rendering <%= @ant_count %> concurrent ants</h2>
       <%= live_component Components.Colony,
         id: "colony",
-        width: 1024,
-        height: 600,
-        background_color: "green",
+        width: @colony_width,
+        height: @colony_height,
+        background_color: @colony_color,
         ants: @ants,
-        ant_size: 2,
-        ant_color: "#000000"
+        ant_size: @ant_size,
+        ant_color: @ant_color
       %>
     </div>
     """
